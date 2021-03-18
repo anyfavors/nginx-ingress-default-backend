@@ -36,6 +36,7 @@ jobs:
       - name: image build
         run: |
           mkdir tmp
+          go get
           go build -a -installsuffix cgo -ldflags "-s -w" -o tmp/rootfs/custom-error-pages
         
       - name: Build an canary image from Dockerfile #for trivy checks before doing a crossbuild.
