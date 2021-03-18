@@ -38,7 +38,9 @@ jobs:
         run: |
           go get "github.com/prometheus/client_golang/prometheus"
           go get "github.com/prometheus/client_golang/prometheus/promhttp"
-          go build -a -installsuffix cgo -ldflags "-s -w" -o rootfs/custom-error-pages
+          chmod +x go-executable-build.bash
+          ./go-executable-build.bash
+          #go build -a -installsuffix cgo -ldflags "-s -w" -o rootfs/custom-error-pages
         
       - name: Build an canary image from Dockerfile #for trivy checks before doing a crossbuild.
         run: |
