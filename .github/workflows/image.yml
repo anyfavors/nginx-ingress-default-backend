@@ -29,10 +29,11 @@ jobs:
           go-version: 1.14
 
 
-      - name: install packages
+      - name: install packages and set gopath
         run: >
           sudo apt install -y
           gcc-arm-linux-gnueabihf
+          echo "GOBIN=$GOPATH/bin" >> $GITHUB_ENV
 
       - name: image build
         run: |
