@@ -31,8 +31,7 @@ jobs:
 
       - name: install packages and set gopath
         run: >
-          sudo apt install -y
-          gcc-arm-linux-gnueabihf
+          sudo apt install -y gcc-arm-linux-gnueabihf &&
           echo "GOBIN=$GOPATH/bin" >> $GITHUB_ENV
 
       - name: image build
