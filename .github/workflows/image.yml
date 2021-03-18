@@ -23,8 +23,20 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-                
       
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.14
+
+      - name: install packages
+        run: >
+          sudo apt install -y
+          gcc-arm-linux-gnueabihf
+
+      - name: image build
+        run: |
+          make
+        
       - name: Build an canary image from Dockerfile #for trivy checks before doing a crossbuild.
         run: |
           docker build -t docker.io/anyfavors/nginx-ingress-default-backend:${{ github.sha }} .
