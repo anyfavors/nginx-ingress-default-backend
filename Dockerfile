@@ -1,4 +1,4 @@
-FROM nginx:1.19.8-alpine
+FROM alpine:3.12
 ARG TARGETOS
 ARG TARGETARCH
 COPY ./rootfs/etc /etc
