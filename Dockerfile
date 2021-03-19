@@ -3,7 +3,7 @@ ARG TARGETOS
 ARG TARGETARCH
 COPY ./rootfs/etc /etc
 COPY ./rootfs/www /www
-COPY "custom-error-pages-$TARGETOS-$TARGETARCH" /custom-error-pages
+COPY "custom-error-pages-$TARGETOS-$TARGETARCH" /bin/custom-error-pages
 COPY index.html /usr/share/nginx/html
-RUN chmod +x custom-error-pages
-CMD ["./custom-error-pages"]
+RUN chmod +x /bin/custom-error-pages
+CMD ["custom-error-pages"]
