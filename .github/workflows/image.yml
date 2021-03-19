@@ -45,7 +45,7 @@ jobs:
         
       - name: Build an canary image from Dockerfile #for trivy checks before doing a crossbuild.
         run: |
-          docker build -t docker.io/anyfavors/nginx-ingress-default-backend:${{ github.sha }} .
+          docker build --build-arg TARGETPLATFORM=linux-amd64 -t docker.io/anyfavors/nginx-ingress-default-backend:${{ github.sha }} .
           
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
