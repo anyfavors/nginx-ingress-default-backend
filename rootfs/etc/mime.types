@@ -1576,7 +1576,7 @@ text/enriched
 text/example
 text/fwdred
 text/grammar-ref-list
-text/html					html htm
+text/html					html
 # text/javascript obsoleted by application/javascript
 text/jcr-cnd					cnd
 text/markdown					markdown md
