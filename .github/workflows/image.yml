@@ -64,7 +64,7 @@ jobs:
         
       - name: Docker meta
         id: docker_meta
-        uses: crazy-max/ghaction-docker-meta@v1
+        uses: crazy-max/ghaction-docker-meta@v2.3.0
         with:
           images: ghcr.io/anyfavors/nginx-ingress-default-backend # list of Docker images to use as base name for tags
           tag-semver: |
