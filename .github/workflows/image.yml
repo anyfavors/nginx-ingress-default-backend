@@ -6,11 +6,14 @@ name: Image build and push
 # events but only for the main branch
 on:
   push:
-    branches:
-      - '**'
+    branches: [ main ]
     tags:
       - 'v*'
-  pull_request:
+  schedule:
+    - cron: "0 06 * * 1"
+    
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -23,6 +26,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2.3.4
+        with:
+         fetch-depth: 0
       
       - uses: actions/setup-go@v2
         with:
@@ -60,16 +65,45 @@ jobs:
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: 'trivy-results.sarif'   
-      
-        
+
+      - name: semantic version
+        id: semantic_version
+        uses: paulhatch/semantic-version@v4.0.2
+        with:
+          # The prefix to use to identify tags
+         tag_prefix: "v"
+         # A string which, if present in a git commit, indicates that a change represents a
+         # major (breaking) change, supports regular expressions wrapped with '/'
+         major_pattern: "(MAJOR)"
+         # Same as above except indicating a minor change, supports regular expressions wrapped with '/'
+         minor_pattern: "(MINOR)"
+         # A string to determine the format of the version output
+         format: "v${major}.${minor}.${patch}"
+         # Optional path to check for changes. If any changes are detected in the path the
+         # 'changed' output will true. Enter multiple paths separated by spaces.
+         #change_path: "src/my-service"
+         # Named version, will be used as suffix for name version tag
+         #namespace: alpssh
+         # Indicate whether short tags like 'v1' should be supported. If false only full
+         # tags like 'v1.0.0' will be recognized.
+         short_tags: true
+         # If this is set to true, *every* commit will be treated as a new version.
+         bump_each_commit: true
+
+      - name: do release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.semantic_version.outputs.version }}
+
       - name: Docker meta
         id: docker_meta
-        uses: crazy-max/ghaction-docker-meta@v3.4.1
+        uses: docker/metadata-action@v3.4.0
         with:
           images: ghcr.io/anyfavors/nginx-ingress-default-backend # list of Docker images to use as base name for tags
-          tag-semver: |
-            {{version}}
-            {{major}}.{{minor}}
+          tags: |
+            type=semver,enable=true,priority=900,pattern={{version}},value=${{ steps.semantic_version.outputs.version }}
+            
         
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1.2.0
