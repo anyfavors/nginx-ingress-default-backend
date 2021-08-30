@@ -1,4 +1,4 @@
-FROM alpine:3.14.0
+FROM alpine:3.14.2
 ARG TARGETOS
 ARG TARGETARCH
 COPY ./rootfs/etc /etc
